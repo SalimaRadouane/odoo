@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_session_detail">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <table class="table table-condensed" style="border: 3px solid black !important;">
+                                    <tr>
+                                        <td width="40%">
+                                            <p style="text-align:center;padding-top:10px;">
+                                                <img t-if="not o.image_1920"
+                                                     height="140"
+                                                     border="1" width="120"/>
+                                                <img t-if="o.image_1920"
+                                                     t-att-src="'data:image_1920/png;base64,%s' % to_text(o.image_1920)"
+                                                     height="140" border="1" width="120"/>
+                                            </p>
+                                        </td>
+                                        <td width="60%">
+                                            <table>
+                                                <tr>
+                                                    <td colspan="3" class="text-center">
+                                                        <span t-field="o.session_formation_id"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span>
+                                                            <strong>Name:</strong>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>:</span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="o.nom_session_formation"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <span>
+                                                            <strong>Date Début:</strong>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>:</span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="o.date_debut"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <span>
+                                                            <strong>Date Fin:</strong>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>:</span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="o.date_fin"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <span>
+                                                            <strong>Nombre de Participants Attendus</strong>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>:</span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="o.participants_number"/>
+                                                    </td>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <td>
+                                                        <span>
+                                                            <strong>Prix :</strong>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>:</span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="o.prix"/>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <br/>
+
+                        <!--  <t t-if="o.session_formation_id">
+                             <span>Session De Formation</span>
+                             <table class="table table-sm o_main_table" name="session">
+                                 <thead>
+                                     <tr>
+                                         <th name="th_participants_number" class="text-left">
+                                             <span>Nombre de Participant</span>
+                                         </th>
+                                         <th name="th_date_debut" class="text-left">
+                                             <span>Date Début</span>
+                                         </th>
+                                         <th name="th_date_fin" class="text-left">
+                                             <span>Date Fin</span>
+                                         </th>
+                                     </tr>
+                                 </thead>
+                                  <t t-set="participants_number" t-value="0"/>
+                                 <t t-foreach="o.session_formation_id" t-as="line">
+                                     <t t-set="participants_number" t-value="participants_number + 1"/>
+                                     <tr>
+                                         <td>
+                                             <span t-field="line.nom_session_formation"/>
+                                         </td>
+                                         <td>
+                                             <span t-field="line.participants_number"/>
+                                         </td>
+                                         <td>
+                                             <span t-field="line.date_debut.date_fin"/>
+                                         </td>
+                                     </tr>
+                                 </t>
+                                 <tr>
+                                     <td colspan="2">
+                                         <strong>Total Session</strong>
+                                     </td>
+                                     <td>
+                                         <t t-esc="participants_number"/>
+                                     </td>
+                                 </tr>
+                             </table>
+                         </t> -->
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

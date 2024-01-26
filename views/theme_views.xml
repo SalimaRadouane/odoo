@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+
+        <record model="ir.ui.view" id="theme_list_view">
+            <field name="name">Theme list</field>
+            <field name="model">formation.theme</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="id_theme"/>
+                    <field name="designation"/>
+                    <field name="description"/>
+
+
+                </tree>
+            </field>
+        </record>
+
+        <!-- search view  -->
+
+        <record model="ir.ui.view" id="theme_search_view">
+            <field name="name">theme search</field>
+            <field name="model">formation.theme</field>
+            <field name="arch" type="xml">
+                <search string="Theme">
+                    <field name="id_theme"/>
+                    <field name="designation"/>
+
+                </search>
+
+            </field>
+
+        </record>
+
+                <!-- Kanban view -->
+
+        <record id="view_theme_kanban" model="ir.ui.view">
+            <field name="name">theme.formation.kanban</field>
+            <field name="model">formation.theme</field>
+            <field name="arch" type="xml">
+                <kanban default_order="id asc">
+                   <field name="id_theme"/>
+                    <field name="designation"/>
+                    <field name="image_1920"/>
+                    <field name="id"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                                <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown">
+
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <t t-if="widget.editable"><a role="menuitem" type="edit" class="dropdown-item">Edit</a></t>
+                                        <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
+                                        <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                    </div>
+                                </div>
+
+                                <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                                        <div class="o_kanban_image d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('formation.theme','image_1920', record.id.raw_value, placeholder)}')">
+                                            <img class="o_kanban_image_inner_pic" t-att-src="kanban_image('formation.theme','image_1920', record.id.raw_value)"/>
+
+                                        </div>
+                                        </div>
+
+                                <div class="oe_kanban_details">
+                                    <ul>
+                                        <li>
+                                           ID: <field name="id_theme"/>
+                                        </li>
+                                        <li>
+                                           Designation: <field name="designation"/>
+                                        </li>
+                                        <li>
+                                           Description: <field name="description"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <!-- explicit form view definition -->
+
+        <record model="ir.ui.view" id="theme_form_view">
+            <field name="name">Theme Form</field>
+            <field name="model">formation.theme</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                    <div>
+                        <field name="image_1920" widget="image" class="oe_avatar"
+                               options="{'preview_image': 'image_128'}"/>
+                    </div>
+                    <group>
+                        <field name="id_theme"/>
+                        <field name="designation"/>
+                        <field name="description"/>
+
+
+                    </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <!-- actions opening views on models -->
+
+        <record model="ir.actions.act_window" id="theme_action_window">
+            <field name="name">Theme</field>
+            <field name="res_model">formation.theme</field>
+            <field name="view_mode">kanban,form,tree</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    créez votre premier Théme!
+                </p>
+            </field>
+        </record>
+
+
+        <!-- server action to the one above -->
+        <!--
+            <record model="ir.actions.server" id="formation.action_server">
+              <field name="name">Formation server</field>
+              <field name="model_id" ref="model_formation_formation"/>
+              <field name="state">code</field>
+              <field name="code">
+                action = {
+                  "type": "ir.actions.act_window",
+                  "view_mode": "tree,form",
+                  "res_model": model._name,
+                }
+              </field>
+            </record>
+        -->
+
+
+        <!-- menu categories -->
+
+        <menuitem name="Theme" id="Theme_formation_cat" parent="formation.menu_root"/>
+        <!-- <menuitem name="Menu 2" id="formation.menu_2" parent="formation.menu_root"/> -->
+
+        <!-- actions -->
+
+        <menuitem name="Liste de Theme" id="theme_formation_list" parent="Theme_formation_cat"
+                  action="theme_action_window"/>
+        <!--   <menuitem name="Server to list" id="formation" parent="formation.menu_2"
+                     action="formation.action_server"/>
+       -->
+    </data>
+</odoo>

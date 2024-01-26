@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+
+        <record model="ir.ui.view" id="participant_list_view">
+            <field name="name">Participant list</field>
+            <field name="model">formation.participant</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="participant_id"/>
+                    <field name="name_participant"/>
+                    <field name="niveau_etude"/>
+                    <field name="email_id"/>
+                    <field name="phone"/>
+                    <field name="sexe"/>
+                    <field name="type"/>
+                    <field name="nom_société"/>
+                    <field name="session_formation_id"/>
+
+
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- explicit form view definition -->
+
+        <record model="ir.ui.view" id="participant_form_view">
+            <field name="name">Participant Form</field>
+            <field name="model">formation.participant</field>
+            <field name="arch" type="xml">
+                <form string="Participants">
+                    <header>
+                        <button name="action_send_mail" type="object" string="Send By Email" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_open_payment" type="object" class="oe_stat_button" icon="fa-cc-mastercard">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Payments</span>
+                                </div>
+                            </button>
+                        </div>
+
+
+
+
+
+
+
+                        <div>
+                            <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+                        </div>
+                    <group>
+                        <group>
+                            <field name="participant_id"/>
+                            <field name="name_participant"/>
+                            <field name="niveau_etude"/>
+                            <field name="session_formation_id"/>
+                            <field name="stage_id"/>
+                        </group>
+                        <group>
+                            <field name="email_id" widget="email"/>
+                            <field name="phone" widget="phone"/>
+                            <field name="sexe" required="1"/>
+                            <field name="type" required="1"/>
+                            <field name="nom_société"/>
+
+                        </group>
+                    </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- search view  -->
+
+        <record model="ir.ui.view" id="participant_search_view">
+            <field name="name">participant search</field>
+            <field name="model">formation.participant</field>
+            <field name="arch" type="xml">
+                <search string="Participant">
+                    <field name="name_participant"/>
+                    <separator/>
+                    <filter string="Homme" name="homme" domain="[('sexe', '=' , 'homme')]"/>
+                    <filter string="Femme" name="femme" domain="[('sexe', '=' , 'femme')]"/>
+
+
+                </search>
+
+            </field>
+
+        </record>
+
+
+
+         <!-- Kanban View -->
+    <record id="formation_participant_view_kanban" model="ir.ui.view">
+        <field name="name">Participant Kanban</field>
+        <field name="model">formation.participant</field>
+        <field name="arch" type="xml">
+
+            <kanban default_group_by="stage_id" on_create="quick_create" quick_create_view="my_library.library_book_rent_view_form_minimal">
+                <field name="stage_id" />
+                <field name="color" />
+                <field name="image_1920"/>
+                <field name="session_formation_id"/>
+                <field name="id"/>
+                <!--<progressbar field="popularity" colors='{"low": "success", "medium": "warning", "high": "danger"}'/> -->
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click">
+
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                                <div class="o_kanban_image d-none d-md-block"
+                                     t-attf-style="background-image:url('#{kanban_image('formation.participant','image_1920', record.id.raw_value, placeholder)}')">
+                                    <img class="o_kanban_image_inner_pic"
+                                         t-att-src="kanban_image('formation.participant','image_1920', record.id.raw_value)"/>
+                                </div>
+                                </div>
+
+
+                            <div class="o_dropdown_kanban dropdown">
+
+                                <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown">
+                                    <span class="fa fa-ellipsis-v"/>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <t t-if="widget.editable">
+                                        <a role="menuitem" type="edit" class="dropdown-item">Edit</a>
+                                    </t>
+                                    <t t-if="widget.deletable">
+                                        <a role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                                    </t>
+                                    <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                </div>
+
+
+
+
+                            </div>
+                            <div class="oe_kanban_content">
+                                <div class="oe_kanban_card oe_kanban_global_click">
+                                    <div>
+                                        <i class="fa fa-user"/>
+                                        <b>
+                                            <field name="name_participant" />
+                                        </b>
+                                    </div>
+                                    <div>
+                                    <span class="font-weight-bold"><field name="session_formation_id"/> </span>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-fax fa-fw"/>
+                                        <field name="phone"/>
+                                    </div>
+                                    <!--<div class="text-muted">
+                                        <i class="fa fa-usd"/>
+                                        <field name="payment" />
+                                    </div> -->
+
+                                    <span class="oe_kanban_list_many2many">
+                                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                    </span>
+                                    <div>
+                                        <field name="popularity" widget="priority"/>
+                                    </div>
+                                    <div>
+                                        <field name="activity_ids" widget="kanban_activity"/>
+                                    </div>
+                                </div>
+
+                                <div class="row mt3">
+                                    <div class="col-4">
+                                        <a name="action_send_mail" type="object"
+                                           class="d-flex flex-column align-items-center">
+                                            <i class="fa fa-comments"/>
+                                            <span class="font-weight-normal">Email</span>
+
+                                        </a>
+
+                                    </div>
+
+
+                                    <div class="col-4">
+                                        <a name="send_sms" type="object"
+                                           class="d-flex flex-column align-items-center">
+                                            <i class="fa fa-comments"/>
+                                            <span class="font-weight-normal">SMS</span>
+
+                                        </a>
+
+
+
+                                    </div>
+
+
+                                    <div class="col-4">
+
+                                        <a name="action_open_payment" type="object"
+                                           class="d-flex flex-column align-items-center">
+                                            <i class="fa fa-cc-visa"/>
+                                            <span class="font-weight-normal">Payment</span>
+
+                                        </a>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--        <record id="view_participant_kanban" model="ir.ui.view">
+            <field name="name">participant.formation.kanban</field>
+            <field name="model">formation.participant</field>
+            <field name="arch" type="xml">
+                <kanban default_order="id asc">
+                    <field name="participant_id"/>
+                    <field name="nom_participant"/>
+                    <field name="prenom_participant"/>
+                    <field name="niveau_etude"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="sexe"/>
+                    <field name="type"/>
+                    <field name="nom_société"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <ul>
+                                        <li>
+                                           ID: <field name="participant_id"/>
+                                        </li>
+                                        <li>
+                                           Nom: <field name="nom_participant"/>
+                                        </li>
+                                        <li>
+                                           Prénom: <field name="prenom_participant"/>
+                                        </li>
+                                        <li>
+                                           Sexe: <field name="sexe"/>
+                                        </li>
+                                        <li>
+                                           Email: <field name="email"/>
+                                        </li>
+                                       <li>
+                                           Phone: <field name="phone"/>
+                                       </li>
+                                        <li>
+                                            Niveau Etude: <field name="niveau_etude"/>
+                                        </li>
+                                        <li>
+                                            Type: <field name="type"/>
+                                        </li>
+                                        <li>
+                                            Nom Société: <field name="nom_société"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record> -->
+
+
+        <!-- actions opening views on models -->
+
+        <record model="ir.actions.act_window" id="participant_action_window">
+            <field name="name">Participant</field>
+            <field name="res_model">formation.participant</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    créez votre premier Participant!
+                </p>
+            </field>
+        </record>
+
+
+        <!-- server action to the one above -->
+        <!--
+            <record model="ir.actions.server" id="formation.action_server">
+              <field name="name">Formation server</field>
+              <field name="model_id" ref="model_formation_formation"/>
+              <field name="state">code</field>
+              <field name="code">
+                action = {
+                  "type": "ir.actions.act_window",
+                  "view_mode": "tree,form",
+                  "res_model": model._name,
+                }
+              </field>
+            </record>
+        -->
+
+
+        <!-- menu categories -->
+
+        <menuitem name="Participant" id="Participant_formation_cat" parent="formation.menu_root"/>
+        <!-- <menuitem name="Menu 2" id="formation.menu_2" parent="formation.menu_root"/> -->
+
+        <!-- actions -->
+
+        <menuitem name="Liste de Participant" id="participant_formation_list" parent="Participant_formation_cat"
+                  action="participant_action_window"/>
+        <!--   <menuitem name="Server to list" id="formation" parent="formation.menu_2"
+                     action="formation.action_server"/>
+       -->
+
+
+        <!-- ///////////////////////////////////////// Payment ////////////////////////////////////// -->
+
+        <!-- explicit list view definition -->
+
+
+         <record model="ir.ui.view" id="payment_list_view">
+             <!--<xpath expr="//tree" position="attributes">
+                    <attribute name="banner_route"></attribute>
+                </xpath> -->
+            <field name="name">Payment list</field>
+            <field name="model">formation.payment</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="payment_id"/>
+                    <field name="mode_paiement"/>
+                    <field name="participant_id"/>
+                    <field name="montant_restant" class="fa fa-usd"/>
+                    <field name="expected_to_be_payed" class="fa fa-usd"/>
+                    <field name="montant_paye" class="fa fa-usd" sum="Total payment"/>
+                    <field name="active" invisible="1"/>
+
+
+
+
+                </tree>
+
+            </field>
+        </record>
+
+<!--icon="fa-money" -->
+        <!-- explicit form view definition -->
+
+        <record model="ir.ui.view" id="payment_form_view">
+            <field name="name">Payment Form</field>
+            <field name="model">formation.payment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                    <group>
+                        <group>
+                            <field name="payment_id"/>
+                            <field name="mode_paiement" required="1"/>
+                            <field name="montant_paye" class="fa fa-usd"/>
+                            <field name="date_payement"/>
+                        </group>
+                        <group>
+                            <field name="montant_restant" class="fa fa-usd"/>
+                            <field name="expected_to_be_payed" class="fa fa-usd"/>
+                            <field name="participant_id"/>
+                            <field name="session_formation_id"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Kanban view -->
+
+
+        <record model="ir.ui.view" id="view_payment_kanban">
+            <field name="name">payment kanban</field>
+            <field name="model">formation.payment</field>
+            <field name="arch" type="xml">
+
+                <kanban class="o_kanban_small_column o_opportunity_kanban" sample="1">
+                    <field name="color"/>
+                    <field name="priority"/>
+                    <field name="expected_to_be_payed"/>
+                    <field name="active"/>
+                    <field name="participant_id"/>
+                    <field name="date_payement"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown">
+
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <t t-if="widget.editable"><a role="menuitem" type="edit" class="dropdown-item">Edit</a></t>
+                                        <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
+                                        <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <div>
+                                        <strong><field name="participant_id"/></strong>
+                                    </div>
+                                    <div class="o_kanban_record_subtitle">
+                                        <div>
+
+                                            <span class="font-weight-light">Montant Paye :</span>
+                                            <field name="montant_paye"/>
+                                             <i class="fa fa-usd"/>
+                                        </div>
+
+                                        <div>
+
+                                            <span class="font-weight-light">Expected To be Payed :</span>
+                                            <field name="expected_to_be_payed"/>
+                                            <i class="fa fa-usd"/>
+                                        </div>
+
+                                        <div>
+                                            <field name="date_payement"/>
+                                        </div>
+
+
+
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <field name="priority" widget="priority"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+
+
+
+            </field>
+        </record>
+
+
+        <!-- pivot view -->
+
+        <record id="view_payment_pivot" model="ir.ui.view">
+        <field name="model">formation.payment</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="session_formation_id" type="col"/>
+                <field name="participant_id" type="row"/>
+                <field name="payment_id" type="row"/>
+
+            </pivot>
+        </field>
+    </record>
+
+
+        <!-- search view  -->
+
+        <record model="ir.ui.view" id="payment_search_view">
+            <field name="name">payment search</field>
+            <field name="model">formation.payment</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="session_formation_id"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                </search>
+
+            </field>
+
+        </record>
+
+        <!-- actions opening views on models -->
+
+        <record model="ir.actions.act_window" id="payment_action_window">
+            <field name="name">Payment</field>
+            <field name="res_model">formation.payment</field>
+            <field name="view_mode">kanban,tree,form,pivot,graph</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    créez votre premier Payment!
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Payments" id="payment_list" parent="Participant_formation_cat"
+                  action="payment_action_window"/>
+
+
+    </data>
+</odoo>
