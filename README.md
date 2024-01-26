@@ -38,7 +38,6 @@ Ce projet est une solution complète de gestion des formations développée avec
 
 ## Installation
 
-1. Clonez le dépôt : `git clone https://github.com/VotreNom/ProjetFormation.git`
-2. Installez les dépendances : `pip install -r requirements.txt`
+1. Clonez le dépôt : `git clone https://github.com/SalimaRadouane/odoo.git`
 3. Exécutez Odoo : `./odoo-bin -c odoo.conf`
 
